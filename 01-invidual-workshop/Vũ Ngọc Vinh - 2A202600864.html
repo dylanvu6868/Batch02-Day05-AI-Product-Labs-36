@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VN Airlines - Chatbot NEO Comprehensive Evaluation Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<style>
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e3a8a;
+    --dark: #0f172a;
+    --light: #f8fafc;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --user-color: #2563eb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, #eef4ff, #f8fafc);
+    color: #111827;
+    line-height: 1.6;
+}
+header {
+    background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+}
+header h1 { font-size: 3rem; margin-bottom: 15px; font-weight: 800; }
+header p { font-size: 1.2rem; opacity: .9; margin-bottom: 5px; }
+.container { max-width: 1200px; margin: auto; padding: 40px 20px; }
+.section { margin-bottom: 60px; }
+.section h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    color: var(--dark);
+    border-bottom: 3px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.05);
+    transition: .3s;
+    margin-bottom: 20px;
+}
+.card:hover { transform: translateY(-3px); }
+.metric { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+.badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: var(--primary);
+    color: white;
+    border-radius: 999px;
+    font-size: .8rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+.badge-danger { background: var(--danger); }
+.badge-success { background: var(--success); }
+
+/* Bố cục Test Case & Bong bóng Chat */
+.test-case-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 20px;
+}
+.chat-box {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.03);
+    border-top: 4px solid var(--primary);
+}
+.chat-box.bad { border-top-color: var(--danger); }
+.chat-box.good { border-top-color: var(--success); }
+.chat-title { font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+
+.chat-msg { margin-bottom: 12px; display: flex; flex-direction: column; }
+.chat-msg .author { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
+.chat-msg .author.user { color: var(--user-color); }
+.chat-msg .author.bot { color: var(--dark); }
+.chat-msg .text {
+    background: #f1f5f9;
+    padding: 10px 14px;
+    border-radius: 12px;
+    display: inline-block;
+    max-width: 90%;
+}
+.chat-box.bad .chat-msg .author.user + .text { background: #fee2e2; }
+.chat-box.good .chat-msg .author.user + .text { background: #dcfce7; }
+
+.issues-box {
+    background: #fff5f5;
+    border-left: 5px solid var(--danger);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+.issues-box h4 { color: #991b1b; margin-bottom: 8px; }
+.issues-box ul { padding-left: 20px; }
+
+/* Biểu đồ & Before/After */
+.mermaid {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.03);
+    margin-bottom: 25px;
+}
+.beforeafter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.before { background: #fef2f2; border-left: 5px solid var(--danger); }
+.after { background: #f0fdf4; border-left: 5px solid var(--success); }
+.before h3 { color: var(--danger); margin-bottom: 10px; }
+.after h3 { color: var(--success); margin-bottom: 10px; }
+
+/* Thanh tiến trình Progress Bar */
+.progress-container { margin-top: 15px; }
+.progress-label { display: flex; justify-content: space-between; font-size: 0.95rem; font-weight: 600; margin-bottom: 5px; }
+.progress {
+    height: 16px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+.fill { height: 100%; transition: width 1s ease-in-out; }
+
+.footer {
+    background: #0f172a;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    margin-top: 60px;
+}
+
+@media(max-width:992px){
+    .test-case-container, .beforeafter { grid-template-columns: 1fr; }
+    header h1 { font-size: 2.2rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>✈️ VN Airlines – Chatbot NEO</h1>
+    <p>Conversational AI Evaluation & UX Improvement Report</p>
+    <p style="font-size: 1rem; margin-top: 15px; font-weight: 300;">Người thực hiện: <strong>Vũ Ngọc Vinh</strong> | MSSV: 2A202600864</p>
+</header>
+
+<div class="container">
+
+    <section class="section">
+        <h2>📊 Executive Dashboard</h2>
+        <div class="grid">
+            <div class="card"><div class="metric">3</div><strong>Test Cases</strong> Mô phỏng thực tế</div>
+            <div class="card"><div class="metric">5</div><strong>Pain Points</strong> Lỗ hổng trải nghiệm</div>
+            <div class="card"><div class="metric">7</div><strong>Proposed Solutions</strong> Giải pháp AI tối ưu</div>
+            <div class="card"><div class="metric" style="color: var(--success);">High</div><strong>Expected UX Impact</strong> Tác động kỳ vọng</div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🎯 Mục tiêu phân tích</h2>
+        <div class="card">
+            <p>Các đoạn hội thoại dưới đây được xây dựng dựa trên kịch bản thử nghiệm thực tế của người dùng khi tương tác với Chatbot NEO. Qua đó, báo cáo sẽ bóc tách chi tiết các điểm nghẽn về mặt UX (Trải nghiệm người dùng), đồng thời đề xuất mô hình giải pháp AI cải tiến giúp nâng cao hiệu quả vận hành và sự hài lòng của khách hàng.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🧪 Chi tiết Test Case & Thực trạng Hội thoại</h2>
+
+        <div class="card" style="background: #ffffff;">
+            <div class="badge">Test Case 1</div>
+            <h3>Tra cứu mã đặt chỗ (Booking Lookup)</h3>
+            <p style="margin-bottom: 20px; color: #64748b;"><b>Kỳ vọng:</b> Nhận diện đúng ý định tra cứu, chủ động hỏi mã đặt chỗ (PNR) để trả kết quả nhanh chóng.</p>
+            
+            <div class="test-case-container">
+                <div class="chat-box bad">
+                    <div class="chat-title"><span class="badge badge-danger">Thực tế (Hiện tại)</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Tôi muốn kiểm tra tình trạng đặt chỗ của mình.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text">Xin chào quý khách. Vui lòng chọn một trong các dịch vụ sau:<br>1. Đặt vé<br>2. Hành lý<br>3. Làm thủ tục<br>4. Khác</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Tôi chỉ muốn kiểm tra booking.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text">Vui lòng chọn menu phù hợp.</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">... (Bỏ cuộc)</span></div>
+                </div>
+                <div class="chat-box good">
+                    <div class="chat-title"><span class="badge badge-success">Đề xuất cải tiến</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Tôi muốn kiểm tra tình trạng đặt chỗ của mình.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO (Improved):</span><span class="text">Tôi có thể hỗ trợ tra cứu đặt chỗ. Vui lòng cung cấp mã đặt chỗ (PNR) gồm 6 ký tự.</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">ABC123</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text">Chuyến bay Hà Nội → TP.HCM ngày 10/06 đã được xác nhận.</span></div>
+                </div>
+            </div>
+
+            <div class="issues-box">
+                <h4>⚠️ Vấn đề phát hiện:</h4>
+                <ul>
+                    <li>Không nhận diện đúng ý định đặt chỗ của hành khách ngay từ đầu.</li>
+                    <li>Bắt buộc điều hướng qua menu tĩnh nhiều bước thay vì đi thẳng vào câu hỏi chuyên sâu.</li>
+                    <li>Làm tăng số bước thao tác không cần thiết cho khách hàng.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card" style="background: #ffffff;">
+            <div class="badge">Test Case 2</div>
+            <h3>Quy định hành lý ký gửi (Baggage Policy)</h3>
+            <p style="margin-bottom: 20px; color: #64748b;"><b>Kỳ vọng:</b> Cá nhân hóa thông tin câu trả lời dựa trên hạng vé hoặc thông tin bối cảnh cụ thể của khách.</p>
+            
+            <div class="test-case-container">
+                <div class="chat-box bad">
+                    <div class="chat-title"><span class="badge badge-danger">Thực tế (Hiện tại)</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Tôi được mang bao nhiêu kg hành lý?</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text">Thông tin hành lý vui lòng tham khảo quy định trên website.</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Tôi đang bay hạng phổ thông.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text">Vui lòng tham khảo trang FAQ.</span></div>
+                </div>
+                <div class="chat-box good">
+                    <div class="chat-title"><span class="badge badge-success">Đề xuất cải tiến</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Tôi được mang bao nhiêu kg hành lý?</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO (Improved):</span><span class="text">Quý khách đang bay hạng vé nào? Phổ thông, Phổ thông đặc biệt hay Thương gia?</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Phổ thông.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text">Theo quy định hiện hành, quý khách được mang tối đa 23kg hành lý ký gửi.</span></div>
+                </div>
+            </div>
+
+            <div class="issues-box">
+                <h4>⚠️ Vấn đề phát hiện:</h4>
+                <ul>
+                    <li>Trả lời chung chung, rập khuôn, đẩy phần việc tìm kiếm thông tin về phía khách hàng.</li>
+                    <li>Không biết khai thác ngữ cảnh hội thoại để đưa ra câu trả lời chính xác theo hạng vé.</li>
+                    <li>Chuyển hướng (redirect) người dùng ra ngoài website hoặc trang FAQ quá sớm.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card" style="background: #ffffff;">
+            <div class="badge">Test Case 3</div>
+            <h3>Yêu cầu gặp nhân viên hỗ trợ (Human Support)</h3>
+            <p style="margin-bottom: 20px; color: #64748b;"><b>Kỳ vọng:</b> Phát hiện tín hiệu muốn gặp tổng đài viên và thực hiện chuyển tiếp mượt mà kèm tóm tắt bối cảnh.</p>
+            
+            <div class="test-case-container">
+                <div class="chat-box bad">
+                    <div class="chat-title"><span class="badge badge-danger">Thực tế (Hiện tại)</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Tôi muốn gặp nhân viên hỗ trợ.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text">Bạn có thể tham khảo các câu hỏi thường gặp.</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Tôi muốn gặp người thật.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text">Vui lòng chọn menu hỗ trợ.</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">... (Ức chế)</span></div>
+                </div>
+                <div class="chat-box good">
+                    <div class="chat-title"><span class="badge badge-success">Đề xuất cải tiến</span></div>
+                    <div class="chat-msg"><span class="author user">User:</span><span class="text">Tôi muốn gặp nhân viên hỗ trợ.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO (Improved):</span><span class="text">Tôi sẽ chuyển yêu cầu của bạn tới nhân viên hỗ trợ ngay lập tức.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text"><i>[Hệ thống tự động]</i> Tóm tắt yêu cầu: Khách hàng muốn đổi ngày bay Hà Nội → Đà Nẵng.</span></div>
+                    <div class="chat-msg"><span class="author bot">NEO:</span><span class="text">Đang kết nối với tổng đài viên...</span></div>
+                </div>
+            </div>
+
+            <div class="issues-box">
+                <h4>⚠️ Vấn đề phát hiện:</h4>
+                <ul>
+                    <li>Thiếu cơ chế chuyển giao người thật (Human Handoff), giữ chân khách hàng trong chatbot một cách khiên cưỡng.</li>
+                    <li>Tạo vòng lặp hội thoại vô tận (Infinite FAQ Loop), gây ức chế cao độ và làm giảm sút nghiêm trọng sự tin cậy.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🚨 Quy trình lỗi hiện tại (Current Failure Flow)</h2>
+        <div class="mermaid">
+            flowchart TD
+            A[User đặt câu hỏi] --> B{Bot có hiểu kịch bản chuẩn?}
+            B -- Không --> C[Trả lời chung chung / Gợi ý Menu]
+            C --> D[User cố gắng giải thích lại]
+            D --> E{Bot vẫn không hiểu?}
+            E -- Đúng --> F[Vòng lặp FAQ lặp đi lặp lại]
+            F --> G[Bế tắc / Infinite Loop]
+            G --> H[Hành khách thất vọng & Rời bỏ]
+            style A fill:#f1f5f9,stroke:#64748b
+            style F fill:#fee2e2,stroke:#ef4444
+            style H fill:#f87171,stroke:#b91c1c,color:#fff
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🚀 Đề xuất cải tiến công nghệ AI</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="badge">Smart Re-Ask</div>
+                <h3>Hỏi lại thông minh</h3>
+                <p>Thay vì bắt người dùng nhập lại tự do, bot phân tích và chủ động đưa ra các gợi ý ý định (Intent) gần nhất để người dùng lựa chọn nhanh.</p>
+            </div>
+            <div class="card">
+                <div class="badge">Confidence Signal</div>
+                <h3>Minh bạch mức độ tự tin</h3>
+                <p>Đo lường độ tự tin của AI: <span style="color:var(--success)">🟢 Cao</span> | <span style="color:var(--warning)">🟡 Trung bình</span> | <span style="color:var(--danger)">🔴 Thấp</span> để có phản xạ kịch bản linh hoạt.</p>
+            </div>
+            <div class="card">
+                <div class="badge">Human Handoff</div>
+                <h3>Chuyển giao mượt mà</h3>
+                <p>Tự động kích hoạt cơ chế chuyển tiếp cuộc gọi tới tổng đài viên ngay lập tức nếu bot thất bại trong việc hiểu ý định 2 lần liên tiếp.</p>
+            </div>
+            <div class="card">
+                <div class="badge">Context Summary</div>
+                <h3>Tóm tắt ngữ cảnh</h3>
+                <p>Tự động đúc kết ngắn gọn lịch sử trò chuyện trước đó gửi cho nhân viên tiếp nhận, giúp giảm thời gian xử lý sự vụ (AHT).</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🔄 Luồng chuyển giao nhân viên lý tưởng (Human Handoff Flow)</h2>
+        <div class="mermaid">
+            flowchart LR
+            A[Thất bại lần 1] --> B[Smart Re-Ask / Gợi ý ý định]
+            B --> C[Thất bại lần 2]
+            C --> D[Kích hoạt Human Handoff]
+            D --> E[Tạo Context Summary tự động]
+            E --> F[Agent tiếp nhận xử lý tức thì]
+            style A fill:#fef2f2,stroke:#ef4444
+            style C fill:#fee2e2,stroke:#ef4444
+            style F fill:#dcfce7,stroke:#22c55e
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>⚖️ So sánh Trải nghiệm: Trước vs Sau cải tiến</h2>
+        <div class="beforeafter">
+            <div class="card before">
+                <h3>Thực trạng (Before)</h3>
+                <ul>
+                    <li>Bị kẹt trong vòng lặp FAQ (FAQ Loop) liên tục.</li>
+                    <li>Không có cơ chế kết nối với nhân viên hỗ trợ khi cần.</li>
+                    <li>Không đánh giá được độ tin cậy của câu trả lời.</li>
+                    <li>Mức độ hài lòng và tin tưởng của hành khách thấp.</li>
+                </ul>
+            </div>
+            <div class="card after">
+                <h3>Đề xuất mới (After)</h3>
+                <ul>
+                    <li>Hỏi lại thông minh (Smart Re-Ask) giúp định hướng lại hội thoại.</li>
+                    <li>Handoff tự động cho tư vấn viên kèm theo tóm tắt.</li>
+                    <li>Đo lường rõ ràng tín hiệu tự tin (Confidence Signal).</li>
+                    <li>Gia tăng trải nghiệm tích cực và lòng trung thành với hãng.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>📈 Chỉ số tác động dự kiến (Expected Impact)</h2>
+        <div class="card">
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Độ chính xác nhận diện Ý định (Intent Recognition Accuracy)</span>
+                    <span>Tăng từ 50% ➔ 90%</span>
+                </div>
+                <div class="progress"><div class="fill" style="width:50%; background:var(--danger)"></div></div>
+                <div class="progress"><div class="fill" style="width:90%; background:var(--success)"></div></div>
+            </div>
+
+            <div class="progress-container" style="margin-top: 30px;">
+                <div class="progress-label">
+                    <span>Mức độ hài lòng của khách hàng (User Satisfaction Score)</span>
+                    <span>Tăng từ 40% ➔ 85%</span>
+                </div>
+                <div class="progress"><div class="fill" style="width:40%; background:var(--danger)"></div></div>
+                <div class="progress"><div class="fill" style="width:85%; background:var(--success)"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🎯 Kết luận tổng quan</h2>
+        <div class="card" style="border-left: 5px solid var(--primary);">
+            <p><strong>Vấn đề cốt lõi:</strong> Chatbot NEO hiện tại hoạt động ổn định với các kịch bản khuôn mẫu tuyến tính, nhưng dễ bị mất phương hướng khi gặp các câu hỏi phi tuyến tính, thiếu khả năng phân tích ngữ cảnh sâu và thiếu lối thoát (escalation path) cho khách hàng.</p>
+            <br>
+            <p><strong>Chiến lược hành động:</strong> Việc áp dụng đồng bộ bộ giải pháp gồm 5 trụ cột: <em>Smart Re-Ask, Confidence Signal, Human Handoff, Context Summary</em> và thiết lập một <em>Vòng lặp học tập liên tục (Continuous Learning Loop)</em> là chìa khóa then chốt để lột xác trợ lý ảo NEO, tương xứng với vị thế chất lượng dịch vụ cao cấp của <strong>VN Airlines</strong>.</p>
+        </div>
+    </section>
+
+</div>
+
+<div class="footer">
+    © 2026 VN Airlines – Chatbot NEO UX & AI Evaluation Report<br>
+    <small>Báo cáo tổng hợp từ dữ liệu nghiên cứu thực tế</small>
+</div>
+
+<script>
+    // Khởi tạo thư viện sơ đồ tự động
+    mermaid.initialize({startOnLoad:true, theme:'neutral', securityLevel:'loose'});
+</script>
+
+</body>
+</html>
