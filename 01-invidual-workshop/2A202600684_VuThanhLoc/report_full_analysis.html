@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Phân tích và Tối ưu hóa Luồng người dùng</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #3498db; color: white; }
+        .evidence-container { margin-top: 30px; }
+        .placeholder-box {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            background: #f9f9f9;
+            margin-bottom: 10px;
+            color: #777;
+        }
+        .flowchart-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 20px;
+        }
+        @media (max-width: 700px) {
+            .evidence-grid { grid-template-columns: 1fr; }
+        }
+        .evidence-item {
+            margin: 0;
+        }
+        .evidence-item img {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .evidence-item figcaption {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #555;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .evidence-item strong {
+            color: #2980b9;
+        }
+        .evidence-missing {
+            display: none;
+            border: 2px dashed #e74c3c;
+            background: #fdf2f2;
+            color: #c0392b;
+            padding: 16px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Báo cáo Phân tích và Tối ưu hóa Luồng người dùng</h1>
+        
+        <h2>1. Tổng quan vấn đề</h2>
+        <p>Báo cáo này tập trung vào việc phân tích các điểm nghẽn (pain points) trong trải nghiệm người dùng hiện tại và đề xuất giải pháp cải tiến thông qua luồng quy trình mới (To-be), nhằm chuyển đổi từ hệ thống hỗ trợ thụ động sang chủ động.</p>
+        
+        <h2>2. Sơ đồ Luồng (Flowchart)</h2>
+        <img
+            src="evidence/flowchart-as-is-to-be.png"
+            alt="Sơ đồ so sánh luồng As-is (hiện tại) và To-be (đề xuất)"
+            class="flowchart-image"
+        />
+        <p><em>Mô tả: Sơ đồ so sánh giữa luồng "As-is" (hiện tại) và luồng "To-be" (đề xuất).</em></p>
+
+        <h2>3. So sánh Luồng thực hiện</h2>
+        <table>
+            <tr>
+                <th>Tiêu chí</th>
+                <th>Luồng hiện tại (As-is)</th>
+                <th>Luồng đề xuất (To-be)</th>
+            </tr>
+            <tr>
+                <td>Vai trò AI</td>
+                <td>Thụ động, hạn chế quyền</td>
+                <td>Chủ động, phân tích, dẫn dắt</td>
+            </tr>
+            <tr>
+                <td>Trải nghiệm</td>
+                <td>Thủ công, dễ tắc nghẽn</td>
+                <td>Tự động hóa, liền mạch (Deep-link)</td>
+            </tr>
+            <tr>
+                <td>Kết quả</td>
+                <td>Dễ gặp Dead-end</td>
+                <td>Giải quyết vấn đề triệt để</td>
+            </tr>
+        </table>
+
+        <h2>4. Hình ảnh minh chứng (Evidence)</h2>
+        <p>Hội thoại với <strong>Trợ thủ AI - Mo247</strong> minh họa pain point: AI yêu cầu TID thủ công, không tổng hợp được dữ liệu, không so sánh được giao dịch.</p>
+        <div class="evidence-container">
+            <div class="evidence-grid">
+                <figure class="evidence-item">
+                    <img src="evidence/1.jpeg" alt="Evidence 1: User hỏi tổng tiền hóa đơn, AI yêu cầu TID" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+                    <p class="evidence-missing">Chưa có ảnh.<br>Lưu screenshot vào:<br><code>evidence/evidence-1.png</code></p>
+                    <figcaption>
+                        <strong>Evidence 1:</strong> User hỏi tổng tiền thanh toán hóa đơn tháng trước — AI không tổng hợp được, yêu cầu TID hoặc chọn khoảng thời gian thủ công.
+                    </figcaption>
+                </figure>
+                <figure class="evidence-item">
+                    <img src="evidence/2.jpeg" alt="Evidence 2: User cung cấp TID, AI xác nhận giao dịch" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+                    <p class="evidence-missing">Chưa có ảnh.<br>Lưu screenshot vào:<br><code>evidence/evidence-2.png</code></p>
+                    <figcaption>
+                        <strong>Evidence 2:</strong> User tự cung cấp TID (131444548885) — AI chỉ xác nhận chi tiết 1 giao dịch, không trả lời câu hỏi ban đầu.
+                    </figcaption>
+                </figure>
+                <figure class="evidence-item">
+                    <img src="evidence/3.jpeg" alt="Evidence 3: User hỏi so sánh trung bình, AI từ chối" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+                    <p class="evidence-missing">Chưa có ảnh.<br>Lưu screenshot vào:<br><code>evidence/evidence-3.png</code></p>
+                    <figcaption>
+                        <strong>Evidence 3:</strong> User hỏi so sánh với trung bình từ đầu năm — AI thừa nhận không tính được, đề xuất tự tra cứu hoặc chuyển CSKH.
+                    </figcaption>
+                </figure>
+                <figure class="evidence-item">
+                    <img src="evidence/4.jpeg" alt="Evidence 4: AI hướng dẫn tra cứu thủ công trên app" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+                    <p class="evidence-missing">Chưa có ảnh.<br>Lưu screenshot vào:<br><code>evidence/evidence-4.png</code></p>
+                    <figcaption>
+                        <strong>Evidence 4:</strong> AI đưa hướng dẫn 4 bước tra cứu lịch sử GD tại MM MEGA MARKET — gánh nặng thủ công cho user (Manual effort).
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+        
+        <h2>5. Giải pháp thực thi</h2>
+        <ul>
+            <li><strong>Tích hợp hệ thống:</strong> Mở rộng quyền truy cập dữ liệu để AI có thể tự thực hiện thay vì yêu cầu người dùng thủ công.</li>
+            <li><strong>Triển khai Deep-linking:</strong> Thay vì thông báo lỗi, AI tự động tạo đường dẫn đưa người dùng tới thẳng trang cần xử lý.</li>
+            <li><strong>Hệ thống Handoff thông minh:</strong> Khi cần chuyển sang nhân viên CSKH, AI phải truyền kèm toàn bộ nhật ký hội thoại trước đó (Context Sharing) để nhân viên hiểu rõ vấn đề mà không cần khách hàng giải thích lại.</li>
+            <li><strong>Nâng cấp khả năng suy luận:</strong> Huấn luyện AI nhận diện các tình huống so sánh dữ liệu thay vì từ chối thực hiện.</li>
+        </ul>
+    </div>
+</body>
+</html>
