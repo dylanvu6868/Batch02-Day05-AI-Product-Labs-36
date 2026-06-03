@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Báo cáo đánh giá NEO - Vietnam Airlines</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: auto;
+            padding: 24px;
+            line-height: 1.6
+        }
+
+        h1,
+        h2 {
+            color: #0b5cab
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            background: #f9fbff
+        }
+
+        .good {
+            color: #0a7d2c;
+            font-weight: bold
+        }
+
+        .warn {
+            color: #c77700;
+            font-weight: bold
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 10px
+        }
+
+        th {
+            background: #eef5ff
+        }
+
+        code {
+            background: #f2f2f2;
+            padding: 2px 4px
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Báo cáo phân tích 3 truy vấn thử nghiệm NEO (Vietnam Airlines)</h1>
+
+    <p>Mục tiêu: đánh giá khoảng cách giữa <b>kỳ vọng người dùng</b> và <b>phản hồi thực tế</b> của chatbot NEO.</p>
+
+    <h2>1. Query: Đổi vé VN257 ngày mai từ Hà Nội đi TP.HCM mất bao nhiêu tiền?</h2>
+    <div class="card">
+        <p><b>Phản hồi thực tế:</b> NEO yêu cầu cung cấp mã đặt chỗ để kiểm tra chính xác.</p>
+        <p><span class="good">Điểm mạnh:</span> Không suy đoán chi phí đổi vé khi thiếu dữ liệu.</p>
+        <p><span class="warn">Điểm gãy:</span> User hỏi về chi phí đổi vé nhưng bot chỉ dừng ở bước thu thập thông tin.
+        </p>
+
+        <h3>Đánh giá</h3>
+        <ul>
+            <li>Intent nhận diện đúng.</li>
+            <li>Có khả năng xác định cần dữ liệu cá nhân hóa.</li>
+            <li>Chưa chủ động hướng dẫn tiếp theo.</li>
+        </ul>
+
+        <h3>Đề xuất To-Be</h3>
+        <ul>
+            <li>Hiển thị nút: Đổi ngày / Đổi giờ / Đổi hành trình.</li>
+            <li>Yêu cầu mã đặt chỗ bằng form thay vì chat tự do.</li>
+            <li>Giải thích vì sao cần mã đặt chỗ.</li>
+            <li>Sau khi có mã đặt chỗ, gọi hệ thống định giá và trả chi phí dự kiến.</li>
+        </ul>
+    </div>
+
+    <h2>2. Query: Tôi đang ở sân bay Nội Bài, chuyến VN154 bị delay bao lâu?</h2>
+    <div class="card">
+        <p><b>Phản hồi thực tế:</b> NEO xác nhận lại số hiệu chuyến bay và ngày khởi hành trước khi tra cứu.</p>
+        <p><span class="good">Điểm mạnh:</span> Có bước xác thực dữ liệu trước khi truy vấn.</p>
+        <p><span class="warn">Điểm gãy:</span> Chưa trả lời ngay nhu cầu chính là thời gian chậm chuyến.</p>
+
+        <h3>Đánh giá</h3>
+        <ul>
+            <li>Luồng xử lý đúng nhưng chưa tối ưu trải nghiệm.</li>
+            <li>User đang ở sân bay cần thông tin thời gian thực.</li>
+            <li>Thêm một bước xác nhận làm tăng độ trễ hội thoại.</li>
+        </ul>
+
+        <h3>Đề xuất To-Be</h3>
+        <ul>
+            <li>Tự động suy luận ngày hiện tại nếu không mơ hồ.</li>
+            <li>Hiển thị nhanh: Delay bao lâu, giờ khởi hành mới, gate, boarding.</li>
+            <li>Nếu dữ liệu không có sẵn, chuyển sang nhân viên hỗ trợ.</li>
+        </ul>
+    </div>
+
+    <h2>3. Query: Tôi mang xe đạp thể thao carbon lên máy bay được không?</h2>
+    <div class="card">
+        <p><b>Phản hồi thực tế:</b> NEO trả lời đầy đủ quy định hành lý đặc biệt.</p>
+        <p><span class="good">Điểm mạnh:</span> Nội dung chính xác và chi tiết.</p>
+        <p><span class="warn">Điểm gãy:</span> Trả lời quá dài so với nhu cầu thực tế của người dùng.</p>
+
+        <h3>Tóm tắt thông tin hữu ích</h3>
+        <ul>
+            <li>Có thể vận chuyển xe đạp carbon dưới dạng hành lý ký gửi.</li>
+            <li>Phải đóng gói đúng quy chuẩn.</li>
+            <li>Nên đăng ký dịch vụ trước tối thiểu 24 giờ.</li>
+            <li>Có giới hạn trọng lượng và kích thước.</li>
+            <li>Có thể phát sinh phụ phí.</li>
+        </ul>
+
+        <h3>Đề xuất To-Be</h3>
+        <p>Trả lời theo cấu trúc:</p>
+        <ol>
+            <li><b>Có được mang không?</b> → Có.</li>
+            <li><b>Cần làm gì?</b> → Đóng gói và đăng ký trước.</li>
+            <li><b>Chi phí?</b> → Hiển thị bảng phí hoặc link trực tiếp.</li>
+        </ol>
+    </div>
+
+    <h2>Tổng hợp hành trình người dùng</h2>
+    <table>
+        <tr>
+            <th>Query</th>
+            <th>Kết quả</th>
+            <th>Loại Flow</th>
+            <th>Điểm nghẽn</th>
+        </tr>
+        <tr>
+            <td>Đổi vé</td>
+            <td>Yêu cầu mã đặt chỗ</td>
+            <td>Low Confidence</td>
+            <td>Chưa hoàn thành tác vụ</td>
+        </tr>
+        <tr>
+            <td>Delay chuyến bay</td>
+            <td>Xác nhận lại thông tin</td>
+            <td>Correction</td>
+            <td>Chưa trả dữ liệu realtime</td>
+        </tr>
+        <tr>
+            <td>Xe đạp carbon</td>
+            <td>Trả lời đầy đủ policy</td>
+            <td>Happy nhưng dài</td>
+            <td>Information overload</td>
+        </tr>
+    </table>
+
+    <h2>Kết luận</h2>
+    <div class="card">
+        <p><b>NEO hoạt động tốt ở tầng FAQ và tra cứu quy định.</b></p>
+        <p>Điểm cần cải thiện lớn nhất là chuyển từ mô hình <code>Information Retrieval</code> sang
+            <code>Task Completion</code>.
+        </p>
+        <ul>
+            <li>Hỏi ít hơn, hành động nhiều hơn.</li>
+            <li>Tối ưu phản hồi theo ngữ cảnh.</li>
+            <li>Rút gọn policy thành quyết định rõ ràng.</li>
+            <li>Tăng khả năng handoff với đầy đủ context.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>Framework Audit 5 Layers</h2>
+        <table>
+            <tr>
+                <th>Layer</th>
+                <th>Câu hỏi đánh giá</th>
+                <th>Quan sát từ 3 test case</th>
+                <th>Đánh giá</th>
+                <th>Khuyến nghị</th>
+            </tr>
+
+            <tr>
+                <td><b>Promise</b></td>
+                <td>User kỳ vọng gì?</td>
+                <td>
+                    - User kỳ vọng NEO xử lý tác vụ thực tế.<br>
+                    - Đổi vé → muốn biết phí đổi.<br>
+                    - Delay → muốn biết ngay thời gian chậm chuyến.<br>
+                    - Xe đạp → muốn biết có mang được hay không.
+                </td>
+                <td>Khoảng cách giữa kỳ vọng và kết quả ở mức trung bình.</td>
+                <td>Thiết kế theo Job-to-be-Done thay vì FAQ.</td>
+            </tr>
+
+            <tr>
+                <td><b>Intent</b></td>
+                <td>AI hiểu đúng ý định không?</td>
+                <td>
+                    Cả 3 query đều được nhận diện đúng intent chính:
+                    <ul>
+                        <li>Đổi vé</li>
+                        <li>Tra cứu chuyến bay</li>
+                        <li>Hành lý đặc biệt</li>
+                    </ul>
+                </td>
+                <td><span class="good">Tốt</span></td>
+                <td>Nâng cấp nhận diện context khẩn cấp (ở sân bay, sắp khởi hành...).</td>
+            </tr>
+
+            <tr>
+                <td><b>Data / Tool</b></td>
+                <td>Có nguồn và tool đúng không?</td>
+                <td>
+                    - Có dấu hiệu tồn tại tool tra cứu booking.<br>
+                    - Có tool tra cứu tình trạng chuyến bay.<br>
+                    - Có knowledge base về hành lý.
+                </td>
+                <td><span class="warn">Khá</span></td>
+                <td>Hiển thị nguồn dữ liệu và thời gian cập nhật.</td>
+            </tr>
+
+            <tr>
+                <td><b>Safety / Behavior</b></td>
+                <td>AI có hành vi rủi ro không?</td>
+                <td>
+                    - Không tự bịa phí đổi vé.<br>
+                    - Không tự suy diễn delay.<br>
+                    - Có xu hướng xác thực trước khi trả lời.
+                </td>
+                <td><span class="good">Tốt</span></td>
+                <td>Duy trì nguyên tắc không trả lời khi thiếu dữ liệu.</td>
+            </tr>
+
+            <tr>
+                <td><b>UX Recovery</b></td>
+                <td>User recover thế nào khi bot chưa giúp được?</td>
+                <td>
+                    - Chưa thấy correction loop.<br>
+                    - Chưa có nút sửa ý định.<br>
+                    - Chưa có handoff chủ động.<br>
+                    - User phải tiếp tục nhập tay.
+                </td>
+                <td><span class="warn">Yếu nhất</span></td>
+                <td>
+                    Bổ sung:
+                    <ul>
+                        <li>Undo</li>
+                        <li>Correction button</li>
+                        <li>Human handoff</li>
+                        <li>Suggested actions</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Kết luận từ 5 Layers</h2>
+        <ul>
+            <li><b>Promise:</b> NEO đang được cảm nhận như trợ lý xử lý nghiệp vụ, nhưng nhiều luồng vẫn dừng ở FAQ.
+            </li>
+            <li><b>Intent:</b> Nhận diện ý định khá tốt.</li>
+            <li><b>Data/Tool:</b> Có nền tảng dữ liệu phù hợp nhưng chưa khai thác tối đa.</li>
+            <li><b>Safety:</b> Hành vi an toàn, không suy đoán dữ liệu.</li>
+            <li><b>UX Recovery:</b> Điểm yếu lớn nhất, dễ làm người dùng bị kẹt giữa hội thoại.</li>
+        </ul>
+
+        <p><b>Tổng đánh giá:</b> NEO mạnh ở FAQ + Routing, khá ở Intent Understanding, nhưng cần cải thiện mạnh về Task
+            Completion và UX Recovery để tiến gần hơn tới một AI Agent thực thụ.</p>
+    </div>
+</body>
+
+</html>
