@@ -6,7 +6,7 @@ Nộp kèm thin SPEC cuối Day 05.
 
 ## 1. Nhóm và track
 
-**Tên nhóm:** [Điền tên nhóm]  
+**Tên nhóm:** 36 
 **Track:** AI Product / Food Delivery Operations / Customer Support Recovery  
 **Sản phẩm/app đã chọn:** ShopeeFood  
 **Phạm vi build đang nghĩ:** AI Delivery Stack & Recovery Copilot
