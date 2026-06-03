@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nhận xét V-App - VinGroup Ecosystem</title>
+  <style>
+    :root {
+      --ink: #152033;
+      --muted: #667085;
+      --line: #d9e2ec;
+      --paper: #f6f8fb;
+      --white: #ffffff;
+      --teal: #00a88f;
+      --teal-dark: #087b72;
+      --gold: #c9901c;
+      --rose: #d94f57;
+      --blue: #2368c8;
+      --shadow: 0 18px 45px rgba(21, 32, 51, 0.1);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.6;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(217, 226, 236, 0.85);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .links a {
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+
+    .links a:hover {
+      background: #eef5f7;
+      color: var(--ink);
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: calc(100vh - 64px);
+      padding: 54px 0 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(340px, 0.98fr);
+      gap: 36px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px;
+      color: var(--teal-dark);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(36px, 5vw, 66px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 22px 0 0;
+      color: #344054;
+      font-size: 19px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 15px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--ink);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(21, 32, 51, 0.06);
+    }
+
+    .button.primary {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: var(--white);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 530px;
+      display: grid;
+      place-items: center;
+    }
+
+    .phone-stack {
+      width: min(100%, 520px);
+      height: 560px;
+      position: relative;
+    }
+
+    .shot {
+      position: absolute;
+      overflow: hidden;
+      border: 1px solid rgba(217, 226, 236, 0.85);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .shot.main {
+      width: 230px;
+      height: 500px;
+      left: 50%;
+      top: 14px;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+
+    .shot.left {
+      width: 190px;
+      height: 410px;
+      left: 0;
+      top: 86px;
+      z-index: 2;
+      opacity: 0.92;
+    }
+
+    .shot.right {
+      width: 190px;
+      height: 410px;
+      right: 0;
+      top: 86px;
+      z-index: 2;
+      opacity: 0.92;
+    }
+
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: -18px 0 54px;
+    }
+
+    .metric {
+      min-height: 112px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    section {
+      padding: 44px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.75fr) minmax(280px, 1fr);
+      gap: 30px;
+      margin-bottom: 24px;
+      align-items: end;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .promise-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .promise {
+      min-height: 168px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .promise .num {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      background: #e7f7f4;
+      color: var(--teal-dark);
+      font-weight: 900;
+    }
+
+    .promise h3,
+    .query h3,
+    .flow-card h3,
+    .proposal h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .promise p,
+    .query p,
+    .flow-card p,
+    .proposal p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(150px, 1fr));
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .screen {
+      min-width: 150px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .screen img {
+      height: 280px;
+      width: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .caption {
+      min-height: 74px;
+      padding: 10px 11px;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .query-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .query {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .query blockquote {
+      margin: 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--teal);
+      border-radius: 0 8px 8px 0;
+      background: #eefaf7;
+      color: var(--ink);
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: #f8fafc;
+      border: 1px solid #e6edf5;
+    }
+
+    .mini strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    .break {
+      padding: 14px;
+      border: 1px solid rgba(217, 79, 87, 0.28);
+      border-radius: var(--radius);
+      background: #fff5f5;
+      color: #7a2630;
+      font-weight: 750;
+    }
+
+    .flows {
+      display: grid;
+      gap: 16px;
+    }
+
+    .flow-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .flow-track {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(130px, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .step {
+      position: relative;
+      min-height: 98px;
+      padding: 14px;
+      border-radius: var(--radius);
+      border: 1px solid #dfe7ef;
+      background: #fbfcfe;
+      font-weight: 750;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .step::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -10px;
+      width: 10px;
+      height: 1px;
+      background: #b8c4d2;
+    }
+
+    .step:last-child::after {
+      display: none;
+    }
+
+    .step.stuck {
+      border-color: rgba(217, 79, 87, 0.48);
+      background: #fff5f5;
+      color: #7a2630;
+    }
+
+    .step.good {
+      border-color: rgba(0, 168, 143, 0.34);
+      background: #effaf7;
+      color: #0d625a;
+    }
+
+    .weak-path {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(300px, 1.14fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .callout {
+      padding: 22px;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    .callout h3 {
+      margin: 0 0 12px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .callout p {
+      margin: 0;
+      color: #d7dee8;
+    }
+
+    .proposal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .proposal {
+      min-height: 188px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      margin-bottom: 14px;
+      padding: 4px 9px;
+      border-radius: 8px;
+      background: #eef2ff;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .to-be-flow {
+      margin-top: 18px;
+      padding: 20px;
+      border: 1px solid rgba(0, 168, 143, 0.32);
+      border-radius: var(--radius);
+      background: #effaf7;
+    }
+
+    .to-be-track {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(120px, 1fr));
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .to-be-track .step {
+      background: var(--white);
+    }
+
+    footer {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 44px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .section-head,
+      .weak-path {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 34px;
+      }
+
+      .hero-visual {
+        min-height: 430px;
+      }
+
+      .phone-stack {
+        height: 430px;
+      }
+
+      .shot.main {
+        width: 190px;
+        height: 410px;
+      }
+
+      .shot.left,
+      .shot.right {
+        width: 150px;
+        height: 320px;
+        top: 70px;
+      }
+
+      .summary-strip,
+      .promise-grid,
+      .query-grid,
+      .proposal-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav {
+        min-height: auto;
+        padding: 12px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .links {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+
+      .summary-strip,
+      .promise-grid,
+      .query-grid,
+      .proposal-grid,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 380px;
+      }
+
+      .phone-stack {
+        height: 380px;
+      }
+
+      .shot.main {
+        width: 170px;
+        height: 360px;
+      }
+
+      .shot.left,
+      .shot.right {
+        width: 130px;
+        height: 278px;
+        top: 64px;
+      }
+
+      .screen img {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav" aria-label="Điều hướng báo cáo">
+      <a class="brand" href="#top">
+        <span class="mark">V</span>
+        <span>V-App UX Review</span>
+      </a>
+      <div class="links">
+        <a href="#promise">Promise</a>
+        <a href="#screens">Screens</a>
+        <a href="#queries">Queries</a>
+        <a href="#flows">Flows</a>
+        <a href="#to-be">To-be</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Product critique · Mini app ecosystem · AI assistant</p>
+        <h1 id="page-title">Nhận xét V-App của VinGroup</h1>
+        <p class="lead">
+          V-App có nền tảng mạnh: đặt xe, đồ ăn, bất động sản và AI hỏi đáp cùng nằm trong một trải nghiệm. Điểm cần nâng cấp nhất là cầu nối giữa việc AI trả lời được và việc người dùng thực sự làm được một hành động tiếp theo.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#to-be">Xem đề xuất sửa path yếu</a>
+          <a class="button" href="#flows">Xem flow as-is</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="Ảnh chụp màn hình V-App">
+        <div class="phone-stack">
+          <figure class="shot left">
+            <img src="z7895776138758_07f03d2c5cbdf86297e117e6062bcc6e.jpg" alt="Màn hình đặt xe GREEN SM trong V-App">
+          </figure>
+          <figure class="shot main">
+            <img src="z7895776123011_b8473d80f78bfc0e4464662c7692ef18.jpg" alt="Màn hình AI gợi ý món ăn giao đến VinUni dưới 40.000 VND">
+          </figure>
+          <figure class="shot right">
+            <img src="z7895776048880_e0fb6e2e0bb5cadc3df551c6512c1efc.jpg" alt="Màn hình Vinhomes Market trong V-App">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <div class="summary-strip" aria-label="Tóm tắt nhanh">
+      <div class="metric">
+        <strong>6</strong>
+        <span>màn hình đã xem</span>
+      </div>
+      <div class="metric">
+        <strong>3</strong>
+        <span>query thật được phân tích</span>
+      </div>
+      <div class="metric">
+        <strong>4</strong>
+        <span>flow as-is: happy, low-confidence, failure, correction</span>
+      </div>
+      <div class="metric">
+        <strong>1</strong>
+        <span>path yếu nhất được đề xuất sửa</span>
+      </div>
+    </div>
+
+    <section id="promise" aria-labelledby="promise-title">
+      <div class="section-head">
+        <h2 id="promise-title">Promise sản phẩm</h2>
+        <p>Promise đọc được từ trải nghiệm không chỉ là gom nhiều mini app, mà là biến một câu hỏi tự nhiên thành hành động trong hệ sinh thái Vin.</p>
+      </div>
+      <div class="promise-grid">
+        <article class="promise">
+          <span class="num">1</span>
+          <h3>Đặt xe</h3>
+          <p>GREEN SM có màn hình tìm điểm đến, lịch sử địa điểm và lựa chọn loại dịch vụ rõ ràng.</p>
+        </article>
+        <article class="promise">
+          <span class="num">2</span>
+          <h3>Đặt đồ ăn</h3>
+          <p>Mini app đồ ăn có danh mục, ưu đãi, thương hiệu và gợi ý cá nhân hóa theo người dùng.</p>
+        </article>
+        <article class="promise">
+          <span class="num">3</span>
+          <h3>Bất động sản</h3>
+          <p>Vinhomes Market cho phép tìm dự án, mua, bán, thuê với giao diện giống một marketplace chuyên biệt.</p>
+        </article>
+        <article class="promise">
+          <span class="num">4</span>
+          <h3>AI hỏi đáp</h3>
+          <p>AI trả lời được các câu hỏi đời sống, có hiển thị số nguồn đã xem xét và chip nguồn.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="screens" aria-labelledby="screens-title">
+      <div class="section-head">
+        <h2 id="screens-title">Màn hình đã chụp</h2>
+        <p>Chuỗi ảnh cho thấy V-App đã bao phủ nhiều bối cảnh: bất động sản, đồ ăn, đặt xe và hỏi đáp AI.</p>
+      </div>
+      <div class="screens">
+        <figure class="screen">
+          <img src="z7895776048880_e0fb6e2e0bb5cadc3df551c6512c1efc.jpg" alt="Vinhomes Market">
+          <figcaption class="caption">Vinhomes Market: tìm bất động sản, dự án nổi bật, mua, bán, thuê.</figcaption>
+        </figure>
+        <figure class="screen">
+          <img src="z7895776053855_7e18eed298800f7ea7598ceff884ec45.jpg" alt="Mini app đồ ăn">
+          <figcaption class="caption">Food: danh mục món, deal, thương hiệu và gợi ý cho người dùng.</figcaption>
+        </figure>
+        <figure class="screen">
+          <img src="z7895776123011_b8473d80f78bfc0e4464662c7692ef18.jpg" alt="AI gợi ý món ăn VinUni">
+          <figcaption class="caption">AI: đề xuất món ăn giao đến VinUni dưới 40.000 VND.</figcaption>
+        </figure>
+        <figure class="screen">
+          <img src="z7895776138758_07f03d2c5cbdf86297e117e6062bcc6e.jpg" alt="GREEN SM đặt xe">
+          <figcaption class="caption">GREEN SM: nhập điểm đến, hẹn giờ, chọn ô tô, xe máy, liên tỉnh.</figcaption>
+        </figure>
+        <figure class="screen">
+          <img src="z7895776141495_0d3cfd97c9d86dff69583f624c52b004.jpg" alt="AI hỏi giao đồ ăn Ocean Park">
+          <figcaption class="caption">AI: hỏi giao đồ ăn tận nơi tại Vinhomes Ocean Park.</figcaption>
+        </figure>
+        <figure class="screen">
+          <img src="z7895776153302_a27dbe11ff394cc71980d361aa654047.jpg" alt="AI hỏi du lịch biển hè 2026">
+          <figcaption class="caption">AI: gợi ý điểm du lịch biển nổi bật hè 2026.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="queries" aria-labelledby="queries-title">
+      <div class="section-head">
+        <h2 id="queries-title">Query thật: kỳ vọng vs thực tế</h2>
+        <p>Các câu hỏi thật cho thấy AI đã trả lời được, nhưng phần chuyển tiếp thành hành động còn thiếu.</p>
+      </div>
+      <div class="query-grid">
+        <article class="query">
+          <blockquote>Đề xuất món ăn giao đến VinUni dưới 40.000 VND</blockquote>
+          <div class="split">
+            <div class="mini">
+              <strong>Kỳ vọng</strong>
+              <ul>
+                <li>Hiểu địa điểm VinUni.</li>
+                <li>Lọc theo ngân sách.</li>
+                <li>Ưu tiên món giao được.</li>
+                <li>Có nút đặt món.</li>
+              </ul>
+            </div>
+            <div class="mini">
+              <strong>Thực tế</strong>
+              <ul>
+                <li>Trả lời khá tốt.</li>
+                <li>Có 7 nguồn và chip nguồn.</li>
+                <li>Chưa có CTA sang mini app đồ ăn.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="break">Điểm gãy: người dùng có thông tin nhưng chưa có đường đi tiếp để đặt món.</div>
+        </article>
+
+        <article class="query">
+          <blockquote>Ở Ocean Park có giao đồ ăn tận nơi không?</blockquote>
+          <div class="split">
+            <div class="mini">
+              <strong>Kỳ vọng</strong>
+              <ul>
+                <li>Xác nhận có giao hay không.</li>
+                <li>Gợi ý cách đặt phù hợp.</li>
+                <li>Có nút kiểm tra địa chỉ.</li>
+              </ul>
+            </div>
+            <div class="mini">
+              <strong>Thực tế</strong>
+              <ul>
+                <li>AI xác nhận có giao.</li>
+                <li>Có 16 nguồn.</li>
+                <li>Nhắc ShopeeFood/GrabFood nhưng chưa nối hành động.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="break">Điểm gãy: sau câu trả lời, người dùng vẫn phải tự nghĩ "giờ mình bấm đâu?".</div>
+        </article>
+
+        <article class="query">
+          <blockquote>Gợi ý điểm du lịch biển hè 2026</blockquote>
+          <div class="split">
+            <div class="mini">
+              <strong>Kỳ vọng</strong>
+              <ul>
+                <li>Danh sách điểm đến có nguồn.</li>
+                <li>Có bước tiếp theo nếu liên quan ecosystem.</li>
+                <li>Lưu lịch trình hoặc đặt dịch vụ.</li>
+              </ul>
+            </div>
+            <div class="mini">
+              <strong>Thực tế</strong>
+              <ul>
+                <li>Danh sách khá đầy đủ.</li>
+                <li>Có chip nguồn.</li>
+                <li>Chưa tạo khác biệt rõ so với AI chat thông thường.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="break">Điểm gãy nhẹ: trả lời tốt, nhưng không có bước tiếp theo có giá trị cao.</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="flows" aria-labelledby="flows-title">
+      <div class="section-head">
+        <h2 id="flows-title">Flow as-is</h2>
+        <p>Bốn flow dưới đây đánh dấu nơi người dùng đi mượt, nơi thiếu tự tin, nơi thất bại và nơi phải tự sửa câu hỏi.</p>
+      </div>
+      <div class="flows">
+        <article class="flow-card">
+          <h3>Happy path</h3>
+          <p>Người dùng mở mini app và tìm được thông tin hoặc chức năng cơ bản.</p>
+          <div class="flow-track">
+            <div class="step good">Mở V-App</div>
+            <div class="step good">Chọn mini app</div>
+            <div class="step good">Tìm xe / đồ ăn / BĐS</div>
+            <div class="step good">AI trả lời có nguồn</div>
+            <div class="step good">Đọc được thông tin</div>
+          </div>
+        </article>
+
+        <article class="flow-card">
+          <h3>Low-confidence path</h3>
+          <p>Người dùng cần kiểm chứng nguồn, nhưng nguồn chưa biến thành công cụ hành động.</p>
+          <div class="flow-track">
+            <div class="step">Hỏi AI</div>
+            <div class="step">AI trả lời có nguồn</div>
+            <div class="step">Mở danh sách nguồn</div>
+            <div class="step">Đọc chip nguồn</div>
+            <div class="step stuck">Kẹt: không rõ nút hành động tiếp</div>
+          </div>
+        </article>
+
+        <article class="flow-card">
+          <h3>Failure path</h3>
+          <p>Người dùng đã muốn đặt ngay, nhưng không thấy đường chuyển sang mini app phù hợp.</p>
+          <div class="flow-track">
+            <div class="step">Hỏi giao đồ ăn Ocean Park</div>
+            <div class="step">AI trả lời: có</div>
+            <div class="step">Nhắc nền tảng / nhà hàng</div>
+            <div class="step">Người dùng muốn đặt</div>
+            <div class="step stuck">Kẹt: không có nút đặt ngay</div>
+          </div>
+        </article>
+
+        <article class="flow-card">
+          <h3>Correction path</h3>
+          <p>Khi kết quả chưa đúng nhu cầu, người dùng phải tự gõ lại ràng buộc.</p>
+          <div class="flow-track">
+            <div class="step">AI gợi ý chưa đúng</div>
+            <div class="step">Người dùng hỏi tiếp</div>
+            <div class="step">AI trả lời lại</div>
+            <div class="step">Không chắc giữ ràng buộc cũ</div>
+            <div class="step stuck">Kẹt: phải lặp lại ngân sách / địa điểm</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="to-be" aria-labelledby="to-be-title">
+      <div class="section-head">
+        <h2 id="to-be-title">Sửa path yếu nhất</h2>
+        <p>Path yếu nhất là: hỏi AI để tìm đồ ăn / dịch vụ, AI trả lời, người dùng muốn hành động, nhưng không có CTA rõ ràng.</p>
+      </div>
+
+      <div class="weak-path">
+        <aside class="callout">
+          <h3>Từ AI biết sang app làm được</h3>
+          <p>Nếu AI chỉ trả lời mà không mở đường sang đặt xe, đặt món hoặc tìm BĐS, lợi thế ecosystem bị giảm. V-App nên biến câu trả lời thành một bước thao tác có thể bấm ngay.</p>
+        </aside>
+
+        <div class="to-be-flow">
+          <div class="to-be-track">
+            <div class="step good">Người dùng hỏi AI</div>
+            <div class="step good">AI phân tích ý định</div>
+            <div class="step good">Trả lời ngắn có nguồn</div>
+            <div class="step good">Hiện CTA theo ngữ cảnh</div>
+            <div class="step good">Mở mini app với bộ lọc sẵn</div>
+            <div class="step good">Người dùng đặt món / đặt xe / xem BĐS</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="proposal-grid" style="margin-top: 16px;">
+        <article class="proposal">
+          <span class="tag">Ask back</span>
+          <h3>Hỏi lại khi thiếu thông tin</h3>
+          <p>Hiện chip như "Ocean Park 1, 2 hay 3?", "giao căn hộ hay văn phòng?", "ăn ngay hay đặt trước?".</p>
+        </article>
+        <article class="proposal">
+          <span class="tag">Source</span>
+          <h3>Biến nguồn thành công cụ</h3>
+          <p>Mỗi source nên có "Mở nguồn" và "Dùng nguồn này để tìm trong app" thay vì chỉ là citation.</p>
+        </article>
+        <article class="proposal">
+          <span class="tag">CTA</span>
+          <h3>Thêm button hành động</h3>
+          <p>Ví dụ: "Xem món dưới 40K gần VinUni", "Kiểm tra địa chỉ giao", "Mở mini app đồ ăn".</p>
+        </article>
+        <article class="proposal">
+          <span class="tag">Undo</span>
+          <h3>Cho sửa nhanh</h3>
+          <p>Hiện dòng bộ lọc đang áp dụng và các nút "Sửa địa điểm", "Tăng ngân sách", "Hoàn tác".</p>
+        </article>
+        <article class="proposal">
+          <span class="tag">Handoff</span>
+          <h3>Khi AI không chắc</h3>
+          <p>Nói rõ chưa xác nhận theo thời gian thực, rồi đề xuất mở mini app để kiểm tra theo địa chỉ hiện tại.</p>
+        </article>
+        <article class="proposal">
+          <span class="tag">Log</span>
+          <h3>Correction log</h3>
+          <p>Lưu các ràng buộc đã sửa: dưới 40.000 VND, chỉ món giao được, gần VinUni.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Kết luận: V-App đã có nền tảng tốt. Bước nâng cấp quan trọng nhất là nối AI với hành động trong mini app để người dùng không bị dừng ở mức đọc thông tin.
+  </footer>
+</body>
+</html>
