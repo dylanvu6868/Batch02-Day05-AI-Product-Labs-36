@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoMo Moni - Classification Recovery Flow</title>
+
+  <style>
+    :root {
+      --momo: #d82d8b;
+      --momo-dark: #a41463;
+      --momo-soft: #fff0f7;
+      --blue: #2563eb;
+      --blue-soft: #eff6ff;
+      --green: #138a5e;
+      --green-soft: #ecfdf5;
+      --amber: #b7791f;
+      --amber-soft: #fffbeb;
+      --red: #d92d20;
+      --red-soft: #fff1f2;
+      --violet: #6d4aff;
+      --violet-soft: #f5f3ff;
+      --ink: #101828;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --soft-line: #edf1f6;
+      --page: #f6f8fb;
+      --surface: #ffffff;
+      --radius: 8px;
+      --shadow: 0 18px 44px rgba(16, 24, 40, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--page);
+      font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5;
+      text-rendering: geometricPrecision;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .page {
+      width: min(1280px, 94vw);
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+      padding: 22px 0 26px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--momo-dark);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.06;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 820px;
+      margin-bottom: 0;
+      color: #344054;
+      font-size: clamp(16px, 2vw, 20px);
+    }
+
+    .hero-tag {
+      display: grid;
+      gap: 8px;
+      min-width: 260px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #344054;
+      background: var(--surface);
+      font-size: 13px;
+      font-weight: 750;
+      text-align: center;
+    }
+
+    .section {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .section-number {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--momo);
+      font-weight: 850;
+      box-shadow: 0 10px 22px rgba(216, 45, 139, 0.22);
+    }
+
+    .section-heading h2 {
+      margin-bottom: 4px;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .section-heading p {
+      max-width: 820px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: minmax(250px, 330px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .evidence-shot {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .evidence-shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .evidence-shot figcaption {
+      padding: 12px 14px;
+      color: var(--muted);
+      border-top: 1px solid var(--soft-line);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .finding-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .finding-card {
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--accent, var(--momo));
+      border-radius: var(--radius);
+      padding: 16px;
+      background: var(--surface);
+      box-shadow: 0 10px 26px rgba(16, 24, 40, 0.06);
+    }
+
+    .finding-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    .finding-card p {
+      margin-bottom: 0;
+      color: #344054;
+      font-weight: 620;
+    }
+
+    .quote-strip {
+      grid-column: 1 / -1;
+      border: 1px solid #f3b0d2;
+      border-left: 6px solid var(--momo);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      background: var(--momo-soft);
+    }
+
+    .quote-strip strong {
+      color: var(--momo-dark);
+    }
+
+    .interactive-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .reveal-button {
+      position: relative;
+      min-height: 132px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--accent, var(--momo));
+      border-radius: var(--radius);
+      color: var(--ink);
+      background: var(--surface);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .reveal-button:hover,
+    .reveal-button:focus-visible,
+    .reveal-button.is-active {
+      border-color: color-mix(in srgb, var(--accent, var(--momo)) 48%, var(--line));
+      background: color-mix(in srgb, var(--accent, var(--momo)) 8%, #ffffff);
+      box-shadow: 0 14px 32px rgba(16, 24, 40, 0.1);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .reveal-button span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      margin-bottom: 10px;
+      border-radius: 999px;
+      color: color-mix(in srgb, var(--accent, var(--momo)) 78%, #101828);
+      background: color-mix(in srgb, var(--accent, var(--momo)) 12%, #ffffff);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .reveal-button strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .reveal-button small {
+      display: block;
+      color: #475467;
+      font-size: 14px;
+      font-weight: 620;
+      line-height: 1.4;
+    }
+
+    .preview-panel {
+      position: sticky;
+      top: 16px;
+      min-height: 430px;
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--preview-accent, var(--momo));
+      border-radius: var(--radius);
+      padding: 20px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .preview-kicker {
+      display: inline-flex;
+      min-height: 26px;
+      align-items: center;
+      padding: 4px 9px;
+      margin-bottom: 14px;
+      border-radius: 999px;
+      color: color-mix(in srgb, var(--preview-accent, var(--momo)) 78%, #101828);
+      background: color-mix(in srgb, var(--preview-accent, var(--momo)) 12%, #ffffff);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .preview-panel h3 {
+      margin-bottom: 10px;
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .preview-panel p {
+      color: #344054;
+      font-size: 16px;
+      font-weight: 620;
+    }
+
+    .preview-list {
+      display: grid;
+      gap: 10px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .preview-list li {
+      position: relative;
+      padding: 11px 12px 11px 36px;
+      border: 1px solid var(--soft-line);
+      border-radius: var(--radius);
+      background: #fbfcfe;
+      color: #344054;
+      font-weight: 640;
+    }
+
+    .preview-list li::before {
+      content: "";
+      position: absolute;
+      left: 13px;
+      top: 17px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--preview-accent, var(--momo));
+    }
+
+    .flow-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 18px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: var(--surface);
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: var(--momo-dark);
+      background: var(--momo-soft);
+      font-weight: 900;
+    }
+
+    .step h3 {
+      margin-bottom: 4px;
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .step p {
+      margin-bottom: 0;
+      color: #475467;
+      font-weight: 620;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .action-grid .reveal-button {
+      min-height: 120px;
+    }
+
+    .transaction-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .transaction {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 15px;
+      background: var(--surface);
+    }
+
+    .transaction header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .merchant {
+      font-weight: 850;
+    }
+
+    .amount {
+      color: var(--momo-dark);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #475467;
+      background: #fbfcfe;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mini-tag.problem {
+      color: var(--red);
+      background: var(--red-soft);
+      border-color: #fecdd3;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 18px;
+    }
+
+    .spec-box {
+      border: 1px solid #f3b0d2;
+      border-left: 6px solid var(--momo);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: var(--momo-soft);
+    }
+
+    .spec-box h3 {
+      margin-bottom: 10px;
+      color: var(--momo-dark);
+      font-size: 22px;
+    }
+
+    .spec-box p {
+      margin-bottom: 0;
+      color: #344054;
+      font-weight: 690;
+    }
+
+    .requirements {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: req;
+    }
+
+    .requirements li {
+      counter-increment: req;
+      position: relative;
+      padding: 10px 12px 10px 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: #344054;
+      font-weight: 650;
+    }
+
+    .requirements li::before {
+      content: counter(req);
+      position: absolute;
+      left: 12px;
+      top: 9px;
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--momo);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .footer-note {
+      margin-top: 28px;
+      border: 1px solid #c7d2fe;
+      border-left: 6px solid var(--blue);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: var(--blue-soft);
+      color: #1d2939;
+      font-weight: 720;
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .overview-grid,
+      .interactive-layout,
+      .flow-layout,
+      .spec-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-tag {
+        min-width: 0;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .preview-panel {
+        position: static;
+        min-height: 0;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100%, 94vw);
+        padding-top: 14px;
+      }
+
+      .hero-tag,
+      .finding-board,
+      .button-grid,
+      .action-grid,
+      .transaction-list {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 14px;
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+      }
+
+      .reveal-button {
+        min-height: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">MoMo Moni - Product workflow analysis</p>
+        <h1>Classification Recovery Flow</h1>
+        <p class="hero-copy">
+          User hỏi về “chi tiêu linh tinh của tôi”, nhưng Moni dừng ở phần giải thích chung. Trang này biến finding thành một flow chi tiết hơn: có evidence, root cause, action button, handoff, undo và correction log.
+        </p>
+      </div>
+
+      <div class="hero-tag" aria-label="Finding layers">
+        <span class="pill">Intent layer</span>
+        <span class="pill">Data-tool layer</span>
+        <span class="pill">UX recovery</span>
+        <span class="pill">Correction log</span>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-heading">
+        <span class="section-number">1</span>
+        <div>
+          <h2>Evidence và vấn đề chính</h2>
+          <p>Case này không phải lỗi câu chữ đơn thuần. Vấn đề nằm ở việc AI hiểu một phần intent nhưng không chuyển được sang workflow có hành động.</p>
+        </div>
+      </div>
+
+      <div class="overview-grid">
+        <figure class="evidence-shot">
+          <img src="./anh_hoidap.jpg" alt="Screenshot câu trả lời của Trợ thủ AI Moni trong app MoMo" />
+          <figcaption>Evidence: Moni nói chưa có tính năng trực tiếp và hướng user tự kiểm tra thủ công.</figcaption>
+        </figure>
+
+        <div class="finding-board">
+          <div class="finding-card" style="--accent: var(--momo);">
+            <strong>Expectation</strong>
+            <p>User dùng cụm “của tôi”, nghĩa là đang kỳ vọng dữ liệu cá nhân trong MoMo chứ không phải định nghĩa chung.</p>
+          </div>
+
+          <div class="finding-card" style="--accent: var(--red);">
+            <strong>Breakdown</strong>
+            <p>Moni không show giao dịch, không show source, không đưa button sửa, không có undo và không có correction log.</p>
+          </div>
+
+          <div class="finding-card" style="--accent: var(--blue);">
+            <strong>Job-to-be-done</strong>
+            <p>User cần xem dữ liệu liên quan, hiểu tiêu chí phân loại, sửa nếu sai và lưu rule cho lần sau.</p>
+          </div>
+
+          <div class="finding-card" style="--accent: var(--green);">
+            <strong>Product direction</strong>
+            <p>Kích hoạt Classification Recovery Flow thay vì trả lời dài rồi đẩy user tự mò trong app.</p>
+          </div>
+
+          <div class="quote-strip">
+            <strong>Finding:</strong>
+            Khi intent mơ hồ về danh mục chi tiêu, Moni phải hỏi lại intent, show source, đưa button hành động, hỗ trợ undo, có handoff và lưu correction log.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <span class="section-number">2</span>
+        <div>
+          <h2>Interactive insight map</h2>
+          <p>Nội dung file được chia thành các lớp phân tích để đọc theo từng góc nhìn: bối cảnh, promise, intent, recovery path, correction và root cause.</p>
+        </div>
+      </div>
+
+      <div class="interactive-layout" data-interactive>
+        <div class="button-grid">
+          <button class="reveal-button is-active" type="button" style="--accent: var(--momo);" data-kicker="Context" data-title="Bối cảnh sử dụng" data-body="User không hỏi 'chi tiêu linh tinh là gì?' theo nghĩa từ điển. Cụm 'của tôi ở trong MoMo' cho thấy user đang hỏi về dữ liệu chi tiêu cá nhân." data-points="Kỳ vọng là Moni truy cập hoặc dẫn đến giao dịch liên quan.|User cần tổng tiền, danh sách giao dịch, lý do phân loại và cách sửa.|Nếu chỉ giải thích chung, task chính vẫn chưa hoàn thành.">
+            <span>Context</span>
+            <strong>Bối cảnh sử dụng</strong>
+            <small>User hỏi về dữ liệu cá nhân, không phải hỏi khái niệm chung.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--blue);" data-kicker="Promise vs Reality" data-title="Promise vs Reality" data-body="Promise ngầm của trợ thủ tài chính là user có thể hỏi bằng ngôn ngữ tự nhiên và được hỗ trợ trên dữ liệu chi tiêu thực tế. Reality là Moni chỉ xác nhận cơ bản, nói chưa có tính năng trực tiếp và hướng user tự kiểm tra." data-points="Promise: hỗ trợ hiểu, kiểm tra hoặc điều chỉnh dữ liệu chi tiêu.|Reality: chatbot trả lời theo hướng hướng dẫn chung.|Khoảng cách nằm ở việc chưa nối chat layer với hành động trên dữ liệu thật.">
+            <span>Promise</span>
+            <strong>Promise vs Reality</strong>
+            <small>Kỳ vọng trợ thủ tài chính bị rơi thành câu trả lời hướng dẫn chung.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--green);" data-kicker="JTBD" data-title="4 intent có thể có" data-body="Một câu hỏi ngắn của user có thể chứa nhiều intent khác nhau. Nếu AI chọn sai intent, user phải tự diễn đạt lại hoặc tự mò trong app." data-points="Xem dữ liệu: các khoản nào đang được xếp là Linh tinh.|Hiểu tiêu chí: vì sao khoản chi bị coi là Linh tinh.|Sửa phân loại: đổi giao dịch sang Ăn uống, Đi lại, Mua sắm hoặc nhóm khác.|Tạo rule: ghi nhớ tiêu chí cá nhân cho lần sau.">
+            <span>JTBD</span>
+            <strong>Job-to-be-done</strong>
+            <small>Xem dữ liệu, hiểu tiêu chí, sửa phân loại hoặc tạo rule.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--red);" data-kicker="AS-IS" data-title="AS-IS flow" data-body="Flow hiện tại bị gãy ngay sau khi Moni nói chưa có tính năng trực tiếp. Từ đó user vẫn phải tự tìm màn hình, tự lọc giao dịch và tự đoán tiêu chí." data-points="User nhập câu hỏi về chi tiêu linh tinh.|Moni nhận diện một phần intent.|Moni trả lời bằng text chung.|Moni hướng user tự vào Quản lý chi tiêu.|User tự tìm, tự hiểu, tự sửa nếu có lỗi.">
+            <span>AS-IS</span>
+            <strong>Điểm kẹt hiện tại</strong>
+            <small>AI hiểu một phần nhưng không đưa user đến dữ liệu hoặc hành động.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--amber);" data-kicker="Low-confidence" data-title="Low-confidence path" data-body="Khi intent mơ hồ, Moni nên hỏi lại thay vì đoán một hướng trả lời chung. Đây là chỗ cần 2-3 option ngắn để user chọn." data-points="Không nên mặc định user chỉ cần giải thích.|Cần hỏi: xem giao dịch, hiểu tiêu chí hay đổi phân loại?|Option rõ giúp giảm cognitive load và giữ vai trò 'trợ thủ'.">
+            <span>Unclear</span>
+            <strong>Low-confidence path</strong>
+            <small>Thiếu bước hỏi lại intent bằng vài lựa chọn ngắn.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--red);" data-kicker="Failure" data-title="Failure path" data-body="Câu 'chưa có tính năng' là một dạng failure có communicate, nhưng recovery chưa đủ tốt vì user vẫn không có đường đi tiếp rõ ràng." data-points="Cần mở deep link sang Quản lý chi tiêu.|Có thể highlight vị trí user cần xem.|Có thể đưa checklist ngắn hoặc chuyển CSKH.|Fallback tốt biến giới hạn hệ thống thành hành động tiếp theo.">
+            <span>Failure</span>
+            <strong>Không đủ fallback</strong>
+            <small>Nói chưa có tính năng nhưng chưa mở được đường đi tiếp.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--violet);" data-kicker="Correction" data-title="Correction path" data-body="Trong tài chính cá nhân, phân loại giao dịch rất dễ sai. Chất lượng sản phẩm nằm ở việc user sửa sai dễ dàng và hệ thống ghi nhớ sửa sai đó." data-points="Cho sửa phân loại ngay trong flow chat.|Xác nhận sau khi sửa.|Hỏi có áp dụng rule cho giao dịch tương tự không.|Có Undo để user yên tâm khi chỉnh dữ liệu.">
+            <span>Correction</span>
+            <strong>Sửa sai và học lại</strong>
+            <small>Thiếu correction log, thiếu undo, thiếu rule learning.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--blue);" data-kicker="Root cause" data-title="Root cause theo product layer" data-body="Điểm nghẽn nằm ở nhiều layer, không chỉ ở prompt hoặc wording. Cần sửa ở tầng intent, tool dữ liệu, recovery UX và correction." data-points="Promise layer: kỳ vọng trợ thủ tài chính chưa nối với hành động.|Intent layer: nhận diện intent còn nông.|Data-tool layer: không show được transaction data.|UX recovery layer: không có re-ask, option, handoff.|Correction layer: không có log, rule learning, undo.">
+            <span>Layers</span>
+            <strong>Root cause</strong>
+            <small>Vấn đề nằm xuyên qua nhiều tầng sản phẩm.</small>
+          </button>
+        </div>
+
+        <aside class="preview-panel" data-preview aria-live="polite" style="--preview-accent: var(--momo);">
+          <span class="preview-kicker" data-preview-kicker>Context</span>
+          <h3 data-preview-title>Bối cảnh sử dụng</h3>
+          <p data-preview-body>User không hỏi 'chi tiêu linh tinh là gì?' theo nghĩa từ điển. Cụm 'của tôi ở trong MoMo' cho thấy user đang hỏi về dữ liệu chi tiêu cá nhân.</p>
+          <ul class="preview-list" data-preview-list>
+            <li>Kỳ vọng là Moni truy cập hoặc dẫn đến giao dịch liên quan.</li>
+            <li>User cần tổng tiền, danh sách giao dịch, lý do phân loại và cách sửa.</li>
+            <li>Nếu chỉ giải thích chung, task chính vẫn chưa hoàn thành.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <span class="section-number">3</span>
+        <div>
+          <h2>TO-BE recovery workflow</h2>
+          <p>Flow đề xuất biến câu trả lời của AI thành một chuỗi thao tác có nguồn dữ liệu, lựa chọn rõ ràng, sửa được và hoàn tác được.</p>
+        </div>
+      </div>
+
+      <div class="flow-layout">
+        <div class="timeline">
+          <div class="step">
+            <span class="step-number">1</span>
+            <div>
+              <h3>User hỏi</h3>
+              <p>“Cho tôi biết chi tiêu linh tinh của tôi ở trong MoMo.”</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <span class="step-number">2</span>
+            <div>
+              <h3>AI nhận diện intent mơ hồ</h3>
+              <p>Câu hỏi có thể là xem dữ liệu, hiểu tiêu chí, sửa phân loại hoặc tạo rule.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <span class="step-number">3</span>
+            <div>
+              <h3>AI hỏi lại bằng option</h3>
+              <p>Không đoán một intent duy nhất. User chọn hướng muốn làm tiếp.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <span class="step-number">4</span>
+            <div>
+              <h3>AI show source</h3>
+              <p>Dựa trên giao dịch 30 ngày gần đây, merchant, số tiền và tag hiện tại.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <span class="step-number">5</span>
+            <div>
+              <h3>User sửa và lưu rule</h3>
+              <p>Đổi phân loại, áp dụng cho lần sau, lưu correction log và cho phép undo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="interactive-layout" data-interactive>
+          <div class="action-grid">
+            <button class="reveal-button is-active" type="button" style="--accent: var(--green);" data-kicker="Action" data-title="Xem giao dịch liên quan" data-body="Moni nên trả lời bằng dữ liệu mẫu hoặc danh sách thật nếu có quyền truy cập. Nội dung cần có tổng tiền, số lượng giao dịch, merchant và tag hiện tại." data-points="Ví dụ: 8 giao dịch có thể thuộc nhóm Linh tinh, tổng 315.000đ.|Mỗi giao dịch có action: xem chi tiết, đổi phân loại, ẩn khỏi nhóm.|Source phải nói rõ đang dựa trên giao dịch 30 ngày gần đây.">
+              <span>Action</span>
+              <strong>Xem giao dịch</strong>
+              <small>Hiển thị danh sách và nguồn dữ liệu liên quan.</small>
+            </button>
+
+            <button class="reveal-button" type="button" style="--accent: var(--blue);" data-kicker="Criteria" data-title="Hiểu hoặc đổi tiêu chí" data-body="Nếu user muốn biết vì sao một khoản bị coi là Linh tinh, Moni cần giải thích tiêu chí và cho phép đổi cách phân loại." data-points="Tiêu chí có thể dựa trên khoản nhỏ, merchant không rõ hoặc không khớp nhóm chính.|Không nên áp một rule như 'dưới 50.000đ' nếu chưa hỏi user.|Cho user tạo tiêu chí riêng để hệ thống ghi nhớ.">
+              <span>Criteria</span>
+              <strong>Hiểu tiêu chí</strong>
+              <small>Giải thích vì sao giao dịch bị xếp là Linh tinh.</small>
+            </button>
+
+            <button class="reveal-button" type="button" style="--accent: var(--momo);" data-kicker="Correction" data-title="Đổi phân loại ngay trong flow" data-body="Khi user chọn một giao dịch, Moni nên đưa các nhóm thay thế như Ăn uống, Đi lại, Mua sắm, Hóa đơn hoặc Tạo nhóm mới." data-points="Ví dụ: Circle K 35.000đ đang là Linh tinh.|User chọn Ăn uống.|Moni xác nhận: đã đổi từ Linh tinh sang Ăn uống.|Sau đó hỏi có áp dụng rule này cho giao dịch tương tự không.">
+              <span>Correction</span>
+              <strong>Đổi phân loại</strong>
+              <small>Sửa tag giao dịch mà không bắt user tự mò trong app.</small>
+            </button>
+
+            <button class="reveal-button" type="button" style="--accent: var(--violet);" data-kicker="Learning" data-title="Tạo rule cho lần sau" data-body="Rule learning giúp hệ thống cá nhân hóa. Đây là bước biến correction đơn lẻ thành cải thiện lâu dài cho user." data-points="Ví dụ: giao dịch Circle K dưới 50.000đ được gợi ý vào Ăn uống.|User có thể chọn áp dụng cho lần sau hoặc chỉ sửa giao dịch này.|Rule cần được ghi lại để user kiểm soát.">
+              <span>Learning</span>
+              <strong>Tạo rule</strong>
+              <small>Ghi nhớ tiêu chí cá nhân cho giao dịch tương tự.</small>
+            </button>
+
+            <button class="reveal-button" type="button" style="--accent: var(--amber);" data-kicker="Handoff" data-title="Handoff khi AI không đủ dữ liệu" data-body="Nếu Moni không thể truy cập dữ liệu trong chat, cần mở đường đi tiếp thay vì dừng ở câu 'chưa có tính năng'." data-points="Mở màn hình Quản lý chi tiêu.|Mở danh sách giao dịch đã lọc nếu có thể.|Chuyển CSKH hoặc tạo ticket nếu user báo dữ liệu sai.|Nói rõ giới hạn của AI để user không hiểu nhầm.">
+              <span>Handoff</span>
+              <strong>Mở nơi phù hợp</strong>
+              <small>Fallback rõ khi AI không thể xử lý trong chat.</small>
+            </button>
+
+            <button class="reveal-button" type="button" style="--accent: var(--red);" data-kicker="Undo" data-title="Undo và correction log" data-body="Undo làm user yên tâm khi sửa dữ liệu. Correction log giúp user biết hệ thống đã đổi gì, khi nào và có áp dụng rule hay không." data-points="Log: 12:05 đổi Circle K 35.000đ từ Linh tinh sang Ăn uống.|Log: 12:06 áp dụng rule cho giao dịch tương tự.|Luôn có Hoàn tác để khôi phục nếu sửa nhầm.">
+              <span>Undo</span>
+              <strong>Hoàn tác và log</strong>
+              <small>Lưu lại thay đổi và cho phép đảo ngược.</small>
+            </button>
+          </div>
+
+          <aside class="preview-panel" data-preview aria-live="polite" style="--preview-accent: var(--green);">
+            <span class="preview-kicker" data-preview-kicker>Action</span>
+            <h3 data-preview-title>Xem giao dịch liên quan</h3>
+            <p data-preview-body>Moni nên trả lời bằng dữ liệu mẫu hoặc danh sách thật nếu có quyền truy cập. Nội dung cần có tổng tiền, số lượng giao dịch, merchant và tag hiện tại.</p>
+            <ul class="preview-list" data-preview-list>
+              <li>Ví dụ: 8 giao dịch có thể thuộc nhóm Linh tinh, tổng 315.000đ.</li>
+              <li>Mỗi giao dịch có action: xem chi tiết, đổi phân loại, ẩn khỏi nhóm.</li>
+              <li>Source phải nói rõ đang dựa trên giao dịch 30 ngày gần đây.</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+
+      <div class="transaction-list">
+        <article class="transaction">
+          <header>
+            <span class="merchant">Circle K</span>
+            <span class="amount">35.000đ</span>
+          </header>
+          <div class="tag-row">
+            <span class="mini-tag problem">Hiện tại: Linh tinh</span>
+            <span class="mini-tag">Gợi ý: Ăn uống</span>
+          </div>
+        </article>
+
+        <article class="transaction">
+          <header>
+            <span class="merchant">Chuyển khoản nhỏ</span>
+            <span class="amount">22.000đ</span>
+          </header>
+          <div class="tag-row">
+            <span class="mini-tag problem">Hiện tại: Linh tinh</span>
+            <span class="mini-tag">Cần hỏi lại</span>
+          </div>
+        </article>
+
+        <article class="transaction">
+          <header>
+            <span class="merchant">Merchant không rõ</span>
+            <span class="amount">48.000đ</span>
+          </header>
+          <div class="tag-row">
+            <span class="mini-tag problem">Hiện tại: Linh tinh</span>
+            <span class="mini-tag">Có thể tạo rule</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <span class="section-number">4</span>
+        <div>
+          <h2>SPEC change và test cases</h2>
+          <p>Phần này chuyển finding thành requirement cụ thể, sau đó kiểm tra bằng các tình huống user có thể gặp trong app.</p>
+        </div>
+      </div>
+
+      <div class="spec-grid">
+        <div class="spec-box">
+          <h3>REQ-MONI-CLASSIFICATION-RECOVERY</h3>
+          <p>Khi user hỏi về danh mục chi tiêu mơ hồ hoặc nghi ngờ phân loại sai, Moni không được chỉ trả lời bằng text giải thích chung. Moni phải kích hoạt recovery flow có dữ liệu, action, handoff, undo và correction log.</p>
+        </div>
+
+        <ol class="requirements">
+          <li>Nhận diện intent có thể thuộc nhóm classification recovery.</li>
+          <li>Nếu intent chưa rõ, hỏi lại user bằng tối đa 3 lựa chọn.</li>
+          <li>Hiển thị source dữ liệu mà AI đang dựa vào.</li>
+          <li>Cho phép xem danh sách giao dịch liên quan.</li>
+          <li>Cho phép đổi phân loại giao dịch ngay trong flow.</li>
+          <li>Cho phép tạo rule cho giao dịch tương tự.</li>
+          <li>Hiển thị xác nhận sau khi sửa và cho phép undo.</li>
+          <li>Lưu correction log.</li>
+          <li>Nếu AI không đủ dữ liệu, handoff sang Quản lý chi tiêu hoặc CSKH.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <span class="section-number">5</span>
+        <div>
+          <h2>Test cases</h2>
+          <p>Các test case được viết từ nội dung file phân tích, dùng để đánh giá Moni có thật sự chuyển từ conversation sang workflow hay chưa.</p>
+        </div>
+      </div>
+
+      <div class="interactive-layout" data-interactive>
+        <div class="button-grid">
+          <button class="reveal-button is-active" type="button" style="--accent: var(--amber);" data-kicker="TC01" data-title="Intent mơ hồ" data-body="Input: 'Cho tôi biết chi tiêu linh tinh của tôi ở trong MoMo.' Expected behavior: Moni không trả lời chung ngay mà hỏi lại bằng các lựa chọn cụ thể." data-points="Xem giao dịch đang được xếp là Linh tinh.|Hiểu hoặc đổi tiêu chí Linh tinh.|Tạo nhóm riêng hoặc rule phân loại cho lần sau.">
+            <span>TC01</span>
+            <strong>Intent mơ hồ</strong>
+            <small>Moni cần hỏi lại bằng option, không đoán một hướng trả lời.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--green);" data-kicker="TC02" data-title="Xem giao dịch" data-body="Input: User chọn 'Xem giao dịch đang được xếp là Linh tinh'. Expected behavior: Moni hiển thị danh sách giao dịch liên quan và source dữ liệu." data-points="Source: dựa trên giao dịch 30 ngày gần đây.|Mỗi giao dịch có action: xem chi tiết, đổi phân loại, ẩn khỏi nhóm.|Không chỉ hướng dẫn user tự đi tìm trong app.">
+            <span>TC02</span>
+            <strong>Xem giao dịch</strong>
+            <small>Hiển thị danh sách, source và action trên từng giao dịch.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--momo);" data-kicker="TC03" data-title="Sửa phân loại" data-body="Input: User đổi giao dịch Circle K 35.000đ từ Linh tinh sang Ăn uống. Expected behavior: Moni xác nhận thay đổi và đưa các lựa chọn tiếp theo." data-points="Xác nhận: đã đổi từ Linh tinh sang Ăn uống.|Cho chọn: áp dụng cho giao dịch tương tự.|Cho chọn: chỉ sửa giao dịch này.|Cho chọn: Undo.">
+            <span>TC03</span>
+            <strong>Sửa phân loại</strong>
+            <small>Correction phải được xác nhận, lưu lại và có Undo.</small>
+          </button>
+
+          <button class="reveal-button" type="button" style="--accent: var(--red);" data-kicker="TC04" data-title="AI không đủ dữ liệu" data-body="Input: User hỏi 'Tại sao khoản này là linh tinh?' nhưng AI không truy cập được giao dịch. Expected behavior: Moni nói rõ giới hạn và mở fallback cụ thể." data-points="Nói rõ: mình chưa xem được chi tiết giao dịch này trong chat.|Đưa button: Mở giao dịch này.|Đưa button: Mở Quản lý chi tiêu.|Đưa button: Liên hệ CSKH.">
+            <span>TC04</span>
+            <strong>Không đủ dữ liệu</strong>
+            <small>Failure path cần handoff rõ, không dừng ở câu xin lỗi.</small>
+          </button>
+        </div>
+
+        <aside class="preview-panel" data-preview aria-live="polite" style="--preview-accent: var(--amber);">
+          <span class="preview-kicker" data-preview-kicker>TC01</span>
+          <h3 data-preview-title>Intent mơ hồ</h3>
+          <p data-preview-body>Input: 'Cho tôi biết chi tiêu linh tinh của tôi ở trong MoMo.' Expected behavior: Moni không trả lời chung ngay mà hỏi lại bằng các lựa chọn cụ thể.</p>
+          <ul class="preview-list" data-preview-list>
+            <li>Xem giao dịch đang được xếp là Linh tinh.</li>
+            <li>Hiểu hoặc đổi tiêu chí Linh tinh.</li>
+            <li>Tạo nhóm riêng hoặc rule phân loại cho lần sau.</li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="footer-note">
+        Kết luận: improvement quan trọng nhất không phải viết câu trả lời dài hơn, mà là thêm recovery flow giúp user xem dữ liệu, sửa dữ liệu, hoàn tác và dạy lại hệ thống.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const interactiveGroups = document.querySelectorAll("[data-interactive]");
+
+    function renderPreview(button, group) {
+      const preview = group.querySelector("[data-preview]");
+      const list = preview.querySelector("[data-preview-list]");
+      const accent = button.style.getPropertyValue("--accent") || "var(--momo)";
+
+      group.querySelectorAll(".reveal-button").forEach((item) => {
+        item.classList.toggle("is-active", item === button);
+      });
+
+      preview.style.setProperty("--preview-accent", accent);
+      preview.querySelector("[data-preview-kicker]").textContent = button.dataset.kicker;
+      preview.querySelector("[data-preview-title]").textContent = button.dataset.title;
+      preview.querySelector("[data-preview-body]").textContent = button.dataset.body;
+      list.innerHTML = "";
+
+      button.dataset.points.split("|").forEach((point) => {
+        const item = document.createElement("li");
+        item.textContent = point;
+        list.appendChild(item);
+      });
+    }
+
+    interactiveGroups.forEach((group) => {
+      const buttons = group.querySelectorAll(".reveal-button");
+
+      buttons.forEach((button) => {
+        button.addEventListener("mouseenter", () => renderPreview(button, group));
+        button.addEventListener("focus", () => renderPreview(button, group));
+        button.addEventListener("click", () => renderPreview(button, group));
+      });
+    });
+  </script>
+</body>
+</html>
